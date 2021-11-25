@@ -1,4 +1,4 @@
-export default girlFirstName = [
+export const girlFirstNames = [
     { "name": "Jess" },
     { "name": "Shandy" },
     { "name": "Alison" },

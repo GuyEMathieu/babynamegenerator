@@ -1,4 +1,4 @@
-export default boyFirstName = [
+export const boyFirstNames = [
     {"name":"Berkley"},
     {"name":"Bryanty"},
     {"name":"Colver"},

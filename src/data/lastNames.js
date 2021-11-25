@@ -1,4 +1,4 @@
-export default lastNames = [
+export const lastNames = [
     { "name": "Sebastian" },
     { "name": "Mayhead" },
     { "name": "Grob" },

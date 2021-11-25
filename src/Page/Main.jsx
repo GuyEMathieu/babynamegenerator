@@ -1,83 +1,99 @@
-// import React from 'react';
-// import {
-//     Grid, Paper,
-//     Container, FormContral, FormLabel, Radio,
-//     RadioGroup, FormControl, FormControlLabel
-// } from '@mui/material';
-// import { makeStyles } from '@mui/styles';
+import React, { useState } from 'react';
+import { styled } from '@mui/material'
+import Form from "../components/Form";
 
-// import baby from '../assets/images/baby.jpg'
-// import twins2 from '../assets/images/twins2.jpg'
-// import basket from '../assets/images/Baby-basket.jpg'
-// import feet from '../assets/images/feet.jpg'
-// import { grid } from '@mui/system';
+//#region Data
+import {boyFirstNames} from '../data/boyFirstNames';
+import {girlFirstNames} from '../data/girlFirstNames';
+import { lastNames } from "../data/lastNames";
+import {chineseFirstNames} from '../data/chineseFirstNames';
+import {chineseLastNames} from '../data/chineseLastNames';
+//#endregion
 
-// const useStyles = makeStyles({
-//     img: {
-//         width: '100vw',
-//         height: '99vh',
-//         opacity: '0.5',
-//         position: 'relative',
-//         zIndex: -1
-//     },
-//     container: {
-//         position: 'relative'
-//     },
-//     form: {
-//         position: 'absolute',
-//         top: '10vw',
-//         left: '10vw',
-//         width: '80vw'
-//     },
-//     paper: {
-//         padding: '16px',
-//         opacity: '0.5'
-//     }
-// })
+//#region Images
+import baby from '../assets/images/baby.jpg'
+import twins2 from '../assets/images/twins2.jpg'
+import basket from '../assets/images/Baby-basket.jpg'
+import feet from '../assets/images/feet.jpg'
+import plush from "../assets/images/plush.jpg";
+import hands_feet from "../assets/images/hands_feet.jpg";
+import ribbon from "../assets/images/ribbon.jpg";
+//#endregion
 
 
-// const Main = () => {
-//     const classes = useStyles();
+const Image = styled('img')(({ theme }) => ({
+    width: '100vw',
+    height: '100vh',
+    opacity: '0.5'
+}));
 
-//     function randomPicture() {
+export default function FullWidthGrid() {
 
-//         const arr = [baby, twins2, basket, feet];
+    function getRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
 
-//         return arr[Math.floor(Math.random() * arr.length)]
-//     }
+    function randomPicture() {
+        return getRandom([baby, twins2, basket, feet, plush, hands_feet, ribbon])
+    }
 
+    const [bg, setBG] = useState(randomPicture());
 
-//     return (
+    const [params, setParams] = useState({
+        nationality: "American",
+        gender: "Male",
+        includeLastName: false
+    })
 
-//         // <Container className={classes.container} style={style}>
-//         //     <div className='form'>
-//         //         <FormControl component="fieldset">
-//         //             <FormLabel component="legend">Gender</FormLabel>
-//         //             <RadioGroup
-//         //                 aria-label="gender"
-//         //                 defaultValue="female"
-//         //                 name="radio-buttons-group"
-//         //             >
-//         //                 <FormControlLabel value="female" control={<Radio />} label="Female" />
-//         //                 <FormControlLabel value="male" control={<Radio />} label="Male" />
-//         //                 <FormControlLabel value="other" control={<Radio />} label="Other" />
-//         //             </RadioGroup>
-//         //         </FormControl>
-//         //     </div>
-//         // </Container>
+    const handleChange = e => {
+        e.preventDefault();
+        const { name, value } = e.target;
+        setParams(prev => {
+            return {
+                ...prev,
+                [name]: name !== 'includeLastName' ? value : JSON.parse(value)
+            }
+        })
+    }
+    
+    const generateName = () => {
+        const { nationality, gender, includeLastName } = params;
 
-//         <div class="container">
-//             <img src={randomPicture()} alt="Cinque Terre" className={classes.img} />
-//             <Grid container spacing={2} class={classes.form}>
-//                 <Grid item xs={8}>
-//                     <Pape>xs=8</Pape>
-//                 </Grid>
-//                 <Grid item xs={4}>
-//                     <Item>xs=4</Item>
-//                 </Grid>
-//             </Grid>
-//         </div>
-//     )
-// }
+        let name = ''
 
-// export default Main
+        if (nationality === 'American') {
+            gender === 'Male'
+                ? name = getRandom(boyFirstNames).name
+                : name = getRandom(girlFirstNames).name
+            
+            if (includeLastName) {
+                name = `${name} ${getRandom(lastNames).name}`
+            }            
+        } else {
+            name = getRandom(chineseFirstNames).name
+
+            if (includeLastName) {
+                name = `${name} ${getRandom(chineseLastNames).name}`;
+            }
+        }
+
+        setBG(randomPicture())
+
+        setParams(prev => {
+            return {
+                ...prev,
+                name: name
+            }
+        })
+    }
+
+    return (
+        <React.Fragment>
+            <Image src={bg} alt="Baby pictures"/>
+            <Form
+                params={params}
+                generateName={generateName}
+                handleChange={handleChange} />
+        </React.Fragment>
+    );
+}

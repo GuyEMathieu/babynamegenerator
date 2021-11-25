@@ -1,4 +1,4 @@
-export default chineseFirstNames = [
+export const chineseFirstNames = [
     { "name": "雅静" },
     { "name": "凰羽" },
     { "name": "芮涵" },
